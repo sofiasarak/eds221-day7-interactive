@@ -84,3 +84,44 @@ animals %>%
   filter(!location %in% sites$location)
 
 semi_join(sites, animals)
+
+
+#Practice with lubridate
+# you have to really make sure that you know the date stucture of your data!
+
+my_date <- "06-30-2003" #we know it's in mdy
+lubridate::mdy(my_date) #put it in ISO 8601 for us!
+
+# new format for date
+my_date <- "06-September-2017"
+lubridate::dmy(my_date) #didn't like Sept
+
+#another example
+my_date <- "19160518"
+lubridate::ymd(my_date)
+
+#what happens if we give lubridate a date that doesn't make sense?
+lubridate::mdy("1942-08-30") #couldn't figure it out
+
+#working with date-times
+
+time <- "2020-08-12 11:18"
+time <- ymd_hm(time) #will return as the UTC time zone
+
+#convert to PDT
+with_tz(time, "America/Los_Angeles") #converted our time to the same time in UTC but in our time zone
+# to directly define the time zone, add an argument tz= (have to look up the lubridate code for your time zone)
+
+# extract info from our dates; can ask for each individual element on its own
+week(time)
+year(time)
+day(time)
+
+Sys.time() #run to find current time at our computer
+#can also write code to figure out how long yoru script takes to run!
+
+start_time <- Sys.time()
+
+end_time <- Sys.time()
+
+end_time - start_time

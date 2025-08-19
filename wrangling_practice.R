@@ -125,3 +125,70 @@ start_time <- Sys.time()
 end_time <- Sys.time()
 
 end_time - start_time
+
+#Practice lubridate within a data frame
+urchin_counts <- tribble( #tribble is a data structure really similar to a data frame
+  ~date, ~species, ~size_mm,
+  "10/3/2020", "purple", 55,
+  "10/4/2020", "red", 48,
+  "11/7/2020", "red", 67
+)
+
+urchin_counts %>%
+  mutate(date = lubridate::mdy(date)) %>% #overwriting our date column into the correct format
+  mutate(year = year(date), month = month(date), day = day(date)) #makes a column of year by pulling it out of the data frame!
+
+day_1 <- lubridate::ymd("2020-01-06")
+day_2 <- ymd("2020-5-18")
+day_3 <- ymd("2020-05-19")
+
+#create time interval and do math with time
+time_interval <- interval(day_1, day_2)
+time_length(time_interval, "week") #default is seconds
+time_length(time_interval, "year")
+
+time_length(c(day_1, day_2)) #doesn't work, so have to make a time interval to use time_length() in this way
+
+# Practice with stringr
+library(stringr)
+
+#practice with str_detect() to detect string patterns
+# returns TRUE/FALSE depending on whether the pattern is detected or not
+
+my_string <- "Teddy loves eating salmon and socks."
+
+# does the pattern "love" exist within the string?
+my_string %>%
+  str_detect("love")
+
+my_string <- c("burrito", "fish taco", "Taco salad")
+
+# does the vector element contain the pattern "fish"?
+my_string %>%
+  str_detect("fish")
+
+#powerful when combined with dplyr functions
+
+starwars %>%
+  filter(str_detect(name, "Skywalker")) #finding the rows in which the column name contains "Skywalker"; arguments are str_detect(string, pattern, negate)
+
+firewalkers <- starwars %>%
+  mutate(name = str_replace(name, "Sky", "Fire")) #helpful for cleaning up your data!
+
+#cleaning up white space
+feedback <- c(" I ate   some nachos", "Wednesday morning.     ")
+
+# remove the leading/trailing/duplicate spaces using str_squish
+str_squish(feedback) #got rid of all extra spaces!
+
+#remove just the leading and trailing spaces
+str_trim(feedback)
+
+#convert cases
+str_to_lower(feedback)
+str_to_upper(feedback)
+str_to_sentence(feedback)
+str_to_title(feedback)
+
+#count matches in a string
+str_count(feedback, patter = "nachos") #returns n values, where n is the number of elements in the vector
